@@ -6,6 +6,8 @@ const mongo_url = "mongodb://127.0.0.1:27017/nie_trainer_node_db?directConnectio
 
 const connectToMongo = async () => {
 
+  //mongoose.Promise = global.Promise;
+
   try {
 
     await mongoose.connect(mongo_url);
@@ -54,28 +56,35 @@ const TrainerModel = (() => {
 
 })();
 
-const createTrainer = async () => {
+const updateByName = async () => {
 
   connectToMongo();
 
-  const trainerModel = new TrainerModel( {
+  const trainer = await TrainerModel.findOne({'name': 'swamy'});
 
-    _id : new mongoose.Types.ObjectId(),
+  trainer.phone_number = '8220214426';
 
-    name: 'swamy',
+  const savedTrainer = await TrainerModel.findOneAndUpdate({'name': 'swamy'}, trainer, {new: true});
 
-    location: 'hyderabad',
-
-    technology: 'MERN',
-
-    phone_number: '666777555'
-
-  } );
-
-  const createdDocument = await trainerModel.save();
-
-  console.log(createdDocument);
+  console.log(savedTrainer);
 
 };
 
-createTrainer();
+updateByName();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
